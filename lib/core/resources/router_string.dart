@@ -1,0 +1,10 @@
+const String localAuthRoute = '/local_auth_route';
+const String getXRoute = '/getx_route';
+const String flutterChartRoute = '/fl_route';
+const String sqfliteRoute = '/sqlite_route';
+const String sliderRoute = '/slider_route';
+const String pullRefreshRoute = '/refresh_route';
+const String liquidAnimationRoute = '/animation_route';
+const String crashAnalyticRoute = '/crashlytics_route';
+const String voiceToTextRoute = '/voice_to_text';
+const String chatOnAppsRoute = '/chat_on_apps';
