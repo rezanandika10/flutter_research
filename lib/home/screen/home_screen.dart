@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_research/feature/liquid_animation/liquid_animation_screen.dart';
-import 'package:flutter_research/feature/local_auth/local_auth_screen.dart';
-import 'package:flutter_research/feature/pull_refresh/presentation/screen/pull_refresh_screen.dart';
-import 'package:flutter_research/home/data/cardModel.dart';
+import 'package:flutter_research/home/data/remote_config_home_model.dart';
 import 'package:flutter_research/styles/fontTheme.dart';
+import 'package:flutter_research/util/general_util.dart';
+import 'package:flutter_research/util/remote_config_util.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,99 +13,111 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<CardModel> cardModelList = [
-    CardModel(
-        title: 'Local Auth', path: 'assets/CardImage01.png', color: 0xFFEBE4D6),
-    CardModel(title: 'GetX', path: 'assets/CardImage02.png', color: 0xFF03174C),
-    CardModel(
-        title: 'Flutter Chart',
-        path: 'assets/CardImage03.png',
-        color: 0xFFFFCF86),
-    CardModel(
-        title: 'SQFLite', path: 'assets/CardImage04.png', color: 0xFFFA6E5A),
-    CardModel(
-        title: 'Slider', path: 'assets/CardImage05.png', color: 0xFF6CB28E),
-    CardModel(
-        title: 'Pull Refresh',
-        path: 'assets/CardImage06.png',
-        color: 0xFF8E97FD),
-    CardModel(
-        title: 'Liquid Animation',
-        path: 'assets/CardImage01.png',
-        color: 0xFFEBE4D6),
-    CardModel(
-        title: 'Crashlytics',
-        path: 'assets/CardImage02.png',
-        color: 0xFF03174C),
-    CardModel(
-        title: 'Voice to Text',
-        path: 'assets/CardImage03.png',
-        color: 0xFFFFCF86),
-    CardModel(
-        title: 'Chat on Apps',
-        path: 'assets/CardImage04.png',
-        color: 0xFFFA6E5A),
-  ];
+  bool isLoading = true;
+
+  RemoteConfigHomeModel remoteConfigHomeModel;
+
+  @override
+  void initState() {
+    FeatureRemoteConfig()
+        .checkPageRomoteConfigSpecific('home_menu')
+        .then((RemoteConfigHomeModel value) {
+      if (value != null) {
+        setState(() {
+          remoteConfigHomeModel = value;
+          isLoading = false;
+        });
+      }
+    }).catchError((dynamic onError) {
+      print(onError);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(8, 16, 8, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            child: Text(
-              'Flutter Research',
-              style: titleHeader,
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 4, bottom: 12),
-            child: Text('by Mobile Squad', style: titleSubHeader),
-          ),
-          Expanded(
-            child: StaggeredGridView.countBuilder(
-              scrollDirection: Axis.vertical,
-              crossAxisCount: 4,
-              itemCount: cardModelList.length,
-              itemBuilder: (BuildContext context, int index) => Container(
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  color: Color(cardModelList[index].color),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          child: Image.asset(
-                        cardModelList[index].path,
-                        fit: BoxFit.fitWidth,
-                      )),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Container(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            cardModelList[index].title,
-                            style: titleCardWhite,
-                            textAlign: TextAlign.center,
-                          ))
-                    ],
-                  ),
-                ),
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.fromLTRB(8, 60, 8, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Text(
+                'Flutter Research',
+                style: titleHeader,
               ),
-              staggeredTileBuilder: (int index) =>
-                  StaggeredTile.count(2, index.isEven ? 3.2 : 2.8),
-              mainAxisSpacing: 4.0,
-              crossAxisSpacing: 4.0,
             ),
-          )
-        ],
+            Container(
+              padding: EdgeInsets.only(top: 4, bottom: 12),
+              child: Text('by Mobile Squad', style: titleSubHeader),
+            ),
+            isLoading
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Container(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator()),
+                      ),
+                    ],
+                  )
+                : Expanded(
+                    child: StaggeredGridView.countBuilder(
+                      scrollDirection: Axis.vertical,
+                      crossAxisCount: 4,
+                      itemCount: remoteConfigHomeModel.homeMenu.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          Container(
+                        child: GestureDetector(
+                          onTap: () {
+                            log('${remoteConfigHomeModel.homeMenu[index].value}');
+                            Navigator.pushNamed(context,
+                                remoteConfigHomeModel.homeMenu[index].value);
+                          },
+                          child: Card(
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            color: Color(GeneralUtil().hexToInt(
+                                remoteConfigHomeModel.homeMenu[index].color)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                    child: Image.network(
+                                  remoteConfigHomeModel.homeMenu[index].asset,
+                                  fit: BoxFit.fitWidth,
+                                )),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Container(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text(
+                                      remoteConfigHomeModel
+                                          .homeMenu[index].name,
+                                      style: titleCardWhite,
+                                      textAlign: TextAlign.center,
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      staggeredTileBuilder: (int index) =>
+                          StaggeredTile.count(2, index.isEven ? 3.2 : 2.8),
+                      mainAxisSpacing: 4.0,
+                      crossAxisSpacing: 4.0,
+                    ),
+                  )
+          ],
+        ),
       ),
     );
   }

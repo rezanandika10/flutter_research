@@ -1,18 +1,26 @@
 import 'dart:convert';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter_research/home/data/remote_config_home_model.dart';
 
 class FeatureRemoteConfig {
-  Future<dynamic> checkPageRomoteConfigSpecific(String type) async {
-    final RemoteConfig remoteConfig = RemoteConfig.instance;
+  RemoteConfigHomeModel remoteConfigHomeModel;
+
+  Future<RemoteConfigHomeModel> checkPageRomoteConfigSpecific(
+      String type) async {
+    final RemoteConfig remoteConfig = await RemoteConfig.instance;
     remoteConfig.setConfigSettings(RemoteConfigSettings(
-        minimumFetchInterval: Duration(milliseconds: 21600000),
-        fetchTimeout: Duration(milliseconds: 30000)));
+      debugMode: true,
+    ));
     if (type == 'home_menu') {
       await remoteConfig.fetch();
-      await remoteConfig.fetchAndActivate();
-      final dynamic ab = json.decode(remoteConfig.getString('pages'));
-      return ab['home_menu'];
+      await remoteConfig.activateFetched();
+      remoteConfigHomeModel = RemoteConfigHomeModel.fromJson(
+          json.decode(remoteConfig.getString('menu')));
+
+      return remoteConfigHomeModel;
+    } else {
+      return remoteConfigHomeModel;
     }
   }
 }
