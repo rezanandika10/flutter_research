@@ -35,7 +35,16 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
         });
       }
     } on PlatformException catch (e) {
-      print('ERROR');
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Your Biometrics Not Configure'),
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [Text('Configure Dulu dongs')],
+                ),
+              ));
     }
   }
 

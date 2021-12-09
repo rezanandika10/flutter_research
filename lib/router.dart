@@ -4,16 +4,17 @@ import 'package:flutter_research/feature/chat_on_apps/chat_on_apps_screen.dart';
 import 'package:flutter_research/feature/flutter_chart/flutter_chart_screen.dart';
 import 'package:flutter_research/feature/liquid_animation/liquid_animation_screen.dart';
 import 'package:flutter_research/feature/local_auth/local_auth_screen.dart';
-import 'package:flutter_research/feature/pull_refresh/pull_refresh_screen.dart';
+import 'package:flutter_research/feature/pull_refresh/presentation/screen/pull_refresh_screen.dart';
 import 'package:flutter_research/feature/slider/slider_screen.dart';
 import 'package:flutter_research/feature/voice_to_text/vlice_to_text_screen.dart';
 
 class Routers {
   static Route<dynamic> generateRouter(RouteSettings settings) {
     switch (settings.name) {
+      
       case localAuthRoute:
         return PageRouteBuilder<dynamic>(
-            pageBuilder: (_, __, ___) => ChatOnAppsScreen(),
+            pageBuilder: (_, __, ___) => LocalAuthScreen(),
             settings: RouteSettings(name: settings.name),
             transitionsBuilder: (_, Animation<double> a, __, Widget c) =>
                 FadeTransition(
@@ -74,6 +75,16 @@ class Routers {
       case voiceToTextRoute:
         return PageRouteBuilder<dynamic>(
             pageBuilder: (_, __, ___) => VoiceToTextScreen(),
+            settings: RouteSettings(name: settings.name),
+            transitionsBuilder: (_, Animation<double> a, __, Widget c) =>
+                FadeTransition(
+                  opacity: a,
+                  child: c,
+                ));
+
+      case chatOnAppsRoute:
+        return PageRouteBuilder<dynamic>(
+            pageBuilder: (_, __, ___) => ChatOnAppsScreen(),
             settings: RouteSettings(name: settings.name),
             transitionsBuilder: (_, Animation<double> a, __, Widget c) =>
                 FadeTransition(
