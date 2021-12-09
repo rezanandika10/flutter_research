@@ -7,12 +7,12 @@ import 'package:flutter_research/feature/local_auth/local_auth_screen.dart';
 import 'package:flutter_research/feature/pull_refresh/presentation/screen/pull_refresh_screen.dart';
 import 'package:flutter_research/feature/slider/slider_screen.dart';
 import 'package:flutter_research/feature/voice_to_text/vlice_to_text_screen.dart';
+import 'package:flutter_research/home/screen/home_screen.dart';
 
 class Routers {
   static Route<dynamic> generateRouter(RouteSettings settings) {
     switch (settings.name) {
-      
-      case localAuthRoute:
+      case '/local_auth_route':
         return PageRouteBuilder<dynamic>(
             pageBuilder: (_, __, ___) => LocalAuthScreen(),
             settings: RouteSettings(name: settings.name),
@@ -22,7 +22,7 @@ class Routers {
                   child: c,
                 ));
 
-      case flutterChartRoute:
+      case '/fl_route':
         return PageRouteBuilder<dynamic>(
             pageBuilder: (_, __, ___) => FlutterChartScreen(),
             settings: RouteSettings(name: settings.name),
@@ -31,8 +31,8 @@ class Routers {
                   opacity: a,
                   child: c,
                 ));
-      
-      case liquidAnimationRoute:
+
+      case '/animation_route':
         return PageRouteBuilder<dynamic>(
             pageBuilder: (_, __, ___) => LiquidAnimationScreen(),
             settings: RouteSettings(name: settings.name),
@@ -42,17 +42,7 @@ class Routers {
                   child: c,
                 ));
 
-      case localAuthRoute:
-        return PageRouteBuilder<dynamic>(
-            pageBuilder: (_, __, ___) => LocalAuthScreen(),
-            settings: RouteSettings(name: settings.name),
-            transitionsBuilder: (_, Animation<double> a, __, Widget c) =>
-                FadeTransition(
-                  opacity: a,
-                  child: c,
-                ));
-
-      case pullRefreshRoute:
+      case '/refresh_route':
         return PageRouteBuilder<dynamic>(
             pageBuilder: (_, __, ___) => PullRefrsehScreen(),
             settings: RouteSettings(name: settings.name),
@@ -61,8 +51,8 @@ class Routers {
                   opacity: a,
                   child: c,
                 ));
-      
-      case sliderRoute:
+
+      case '/slider_route':
         return PageRouteBuilder<dynamic>(
             pageBuilder: (_, __, ___) => SliderScreen(),
             settings: RouteSettings(name: settings.name),
@@ -71,8 +61,8 @@ class Routers {
                   opacity: a,
                   child: c,
                 ));
-      
-      case voiceToTextRoute:
+
+      case '/voice_to_text':
         return PageRouteBuilder<dynamic>(
             pageBuilder: (_, __, ___) => VoiceToTextScreen(),
             settings: RouteSettings(name: settings.name),
@@ -82,9 +72,19 @@ class Routers {
                   child: c,
                 ));
 
-      case chatOnAppsRoute:
+      case '/chat_on_apps':
         return PageRouteBuilder<dynamic>(
             pageBuilder: (_, __, ___) => ChatOnAppsScreen(),
+            settings: RouteSettings(name: settings.name),
+            transitionsBuilder: (_, Animation<double> a, __, Widget c) =>
+                FadeTransition(
+                  opacity: a,
+                  child: c,
+                ));
+
+      case '/home_route':
+        return PageRouteBuilder<dynamic>(
+            pageBuilder: (_, __, ___) => HomeScreen(),
             settings: RouteSettings(name: settings.name),
             transitionsBuilder: (_, Animation<double> a, __, Widget c) =>
                 FadeTransition(

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_research/home/screen/home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'router.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -10,13 +15,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        debugShowCheckedModeBanner: false,
-        home: SafeArea(child: Scaffold(body: HomeScreen())),
-      ),
+          title: 'Flutter Research',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: Routers.generateRouter,
+          initialRoute: '/home_route'),
     );
   }
 }
